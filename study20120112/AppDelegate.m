@@ -20,9 +20,13 @@
 {
   self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
   self.window.backgroundColor=[UIColor whiteColor];
-  UITableView* tableview=[[[UITableView alloc]initWithFrame:
+  for(int i=0;i<3;i++){
+    count[i]=2;
+  }
+  tableview=[[[UITableView alloc]initWithFrame:
                            [UIScreen mainScreen].applicationFrame
                             style:UITableViewStylePlain]autorelease];
+  [self addEditbutton];
   [self.window addSubview:tableview];
   tableview.dataSource=self;
   [self.window makeKeyAndVisible];
@@ -34,7 +38,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-  return 2;
+  return count[section];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -50,8 +54,32 @@
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+  count[indexPath.section]--;
+  [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
   
 }
+
+-(void)addEditbutton
+{
+  UIButton* editButton=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+  [editButton setTitle:@"Edit" forState:UIControlStateNormal];
+  [editButton addTarget:self action:@selector(changeMode:) forControlEvents:UIControlEventTouchUpInside];
+  [self.window addSubview:editButton];
+  
+  CGRect frame=tableview.frame;
+  frame.size.height=44;
+  editButton.frame=CGRectInset(frame,4,4);
+  frame.origin.y+=frame.size.height;
+  frame.size.height=tableview.frame.size.height-frame.size.height;
+  tableview.frame=frame;
+}
+
+-(void)changeMode:(UIButton*)button
+{
+  [tableview setEditing:!tableview.editing animated:YES];
+  [button setTitle:tableview.editing?@"Done":@"Edit" forState:UIControlStateNormal];
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
   // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

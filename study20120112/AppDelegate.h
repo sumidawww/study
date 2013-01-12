@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,UITableViewDataSource>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UITableViewDataSource>{
+  int count[3];
+  UITableView* tableview;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 
