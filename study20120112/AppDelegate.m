@@ -24,10 +24,34 @@
                            [UIScreen mainScreen].applicationFrame
                             style:UITableViewStylePlain]autorelease];
   [self.window addSubview:tableview];
+  tableview.dataSource=self;
   [self.window makeKeyAndVisible];
   return YES;
 }
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+  return 3;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+  return 2;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  static NSString *CellIdentifier=@"Cell";
+  UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+  if(cell==nil){
+    cell=[[[UITableViewCell alloc]initWithStyle:
+           UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
+  }
+  cell.textLabel.text=[NSString stringWithFormat:@"　項目　%d-%d", indexPath.section, indexPath.row];
+  return cell;
+}
 
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
   // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
